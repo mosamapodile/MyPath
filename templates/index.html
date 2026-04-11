@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>MyPath | Career Navigator</title>
+    
+    <style>
+        /* Define your custom Ocean & Mint theme */
+        :root {
+            --primary: #0077b6; /* Ocean Blue */
+            --primary-hover: #0096c7;
+            --background-color: #f0fdfa; /* Very soft Mint White background */
+            --card-background-color: #ffffff; /* Pure white forms */
+            --text-color: #1e3a8a; /* Dark Blue Text (not harsh black) */
+            --border-radius: 12px;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        main.container {
+            max-width: 800px;
+            background: var(--card-background-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0, 119, 182, 0.1); /* Soft blue shadow */
+            border: 1px solid #ccfbf1; /* Very faint mint border */
+        }
+
+        h1 {
+            color: var(--primary);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        /* Styling Inputs with Mint Focus */
+        input, textarea, select {
+            border-color: #e2e8f0;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #2dd4bf !important; /* Soft Mint Focus */
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.2) !important;
+        }
+
+        button {
+            border: none;
+            background-color: var(--primary);
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            transition: transform 0.1s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #output {
+            white-space: pre-wrap; /* Keeps AI line breaks */
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #2dd4bf; /* Mint accent line */
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        
+        <header>
+            <h1>MyPath🎯</h1>
+            <p class="subtitle">AI Career Guide for South African Students</p>
+        </header>
+
+        <section id="form-section">
+            <label for="subjects">Subjects & Marks 📊</label>
+            <textarea id="subjects" rows="4" placeholder="e.g. English 65%, Math Lit 50%, LO 80%..."></textarea>
+
+            <div class="grid">
+                <div>
+                    <label for="interests">What do you enjoy? 🔥</label>
+                    <input type="text" id="interests" placeholder="e.g. Working with cars, gaming, helping people">
+                </div>
+                <div>
+                    <label for="goal">Your Main Mission 🚀</label>
+                    <select id="goal">
+                        <option value="money">💰 Secure the Bag (High Income)</option>
+                        <option value="passion">🎨 Follow My Passion (Creative/Impact)</option>
+                        <option value="stable">🛡️ Safety First (Stable Jobs)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="sendData()">Find My Career Map</button>
+        </section>
+
+        <section id="result-section" style="display:none;">
+            <article>
+                <header>
+                    <strong id="res-title">Analyzing your future...</strong>
+                </header>
+                <div id="output">
+                    </div>
+                <footer>
+                    <button class="secondary outline" onclick="location.reload()">Start Over</button>
+                </footer>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        async function sendData() {
+            const subjects = document.getElementById('subjects').value;
+            const interests = document.getElementById('interests').value;
+            const goal = document.getElementById('goal').value;
+
+            // Simple validation
+            if(!subjects || !interests) {
+                alert("Please fill in your marks and interests first!");
+                return;
+            }
+
+            // UI Switch
+            document.getElementById('form-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({subjects, interests, goal})
+                });
+                
+                const result = await response.json();
+                document.getElementById('res-title').innerText = "Your Personalized Career Roadmap";
+                document.getElementById('output').innerText = result.message;
+            } catch (error) {
+                document.getElementById('output').innerText = "Oops! The server took a taxi. Please try again.";
+            }
+        }
+    </script>
+</body>
+</html>
