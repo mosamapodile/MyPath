@@ -57,3 +57,4 @@ def analyze():
 
 if __name__ == '__main__':
     app.run(debug=True)
+# $5 openai api keys quota bill
