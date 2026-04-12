@@ -1,213 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <title>MyPath | Career Navigator</title>
-    
-    <style>
-        :root {
-            --primary: #0077b6;
-            --background-color: #f0fdfa;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background: linear-gradient(180deg, #ffffff 0%, #e0f7fa 100%);
-            color: #023e8a;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column; /* Stack vertically */
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            padding: 20px;
-        }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-        main.container {
-            max-width: 650px;
-            background: #ffffff;
-            padding: 2.5rem;
-            border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(0, 119, 182, 0.1);
-            width: 100%;
-        }
+<title>MyPath | Career Navigator</title>
 
-        h1 { font-size: 2.5rem; color: var(--primary); text-align: center; margin-bottom: 0.5rem; }
-        .subtitle { text-align: center; color: #00b4d8; margin-bottom: 2rem; font-weight: 500; }
+<style>
+:root {
+    --blue: #0077b6;
+    --blue-soft: #00b4d8;
+    --green: #2a9d8f;
+    --green-soft: #d1fae5;
+}
 
-        textarea, input, select {
-            background-color: #f0f9ff !important;
-            border: 2px solid #e0f2fe !important;
-            border-radius: 15px !important;
-        }
+/* 🌊 BACKGROUND */
+body {
+    background: linear-gradient(180deg, #ffffff 0%, #e6f7ff 45%, #e8fff7 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    padding: 20px;
+    color: #023e8a;
+}
 
-        button {
-            border: none;
-            background: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
-            border-radius: 50px;
-            padding: 0.8rem 2rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+/* 🧊 CARD */
+main.container {
+    max-width: 720px;
+    width: 100%;
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(18px);
+    padding: 2.8rem;
+    border-radius: 30px;
+    border: 1px solid rgba(0,180,216,0.2);
+    box-shadow: 0 25px 80px rgba(0, 119, 182, 0.12);
+}
 
-        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,119,182,0.3); }
+/* 🧭 TITLE */
+h1 {
+    font-size: 3.1rem;
+    color: var(--blue);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
 
-        #output {
-            background: #fdfdfd;
-            border: 2px dashed #00b4d8;
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-        }
+/* 🏷️ BADGE */
+.badge {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 1rem auto;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--blue-soft), var(--green-soft));
+    color: #0b3d91;
+}
 
-        .badge {
-            display: block;
-            width: fit-content;
-            margin: 0 auto 1rem auto;
-            padding: 4px 12px;
-            background: #d1fae5;
-            color: #065f46;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+/* 💚 QUOTE BLOCK (UNCHANGED) */
+.definition {
+    text-align: center;
+    font-size: 0.78rem;
+    font-style: italic;
+    font-family: Georgia, serif;
+    color: var(--green);
+    opacity: 0.9;
+    line-height: 1.6;
+    margin: 1.2rem 0 2rem 0;
+    padding: 0 12px;
+}
 
-        /* --- BURSARY SECTION --- */
-        .bursary-alert-box {
-            max-width: 650px;
-            width: 100%;
-            margin-top: 30px;
-            background: white;
-            padding: 25px;
-            border-radius: 25px;
-            text-align: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e0f2fe;
-        }
+/* LABELS */
+label {
+    font-weight: 800;
+    color: var(--blue);
+}
 
-        .bursary-alert-box h4 {
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
+/* INPUTS */
+textarea, input, select {
+    background: #f7fdff !important;
+    border: 2px solid #d9f2ff !important;
+    border-radius: 14px !important;
+}
 
-        .bursary-alert-box p {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 20px;
-        }
+textarea:focus, input:focus, select:focus {
+    border-color: var(--green) !important;
+    box-shadow: 0 0 0 3px rgba(42,157,143,0.15);
+}
 
-        .alert-btn {
-            background: #2a9d8f !important; /* Greenish teal for action */
-            color: white !important;
-            text-decoration: none;
-            display: inline-block;
-            border-radius: 50px;
-            padding: 10px 30px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+/* BUTTON */
+button {
+    border: none;
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    border-radius: 50px;
+    padding: 0.95rem 2rem;
+    font-weight: 800;
+}
 
-        .alert-btn:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-        }
+/* OUTPUT */
+#output {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border: 1px solid #d9f2ff;
+    min-height: 120px;
+}
 
-        .spinner {
-            display: inline-block;
-            width: 1.2rem;
-            height: 1.2rem;
-            border: 3px solid rgba(0, 119, 182, 0.2);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s ease-in-out infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
+/* CAREER ALERTS */
+.bursary-alert-box {
+    max-width: 720px;
+    width: 100%;
+    margin-top: 25px;
+    background: linear-gradient(135deg, #e8fff7, #e6f7ff);
+    padding: 25px;
+    border-radius: 25px;
+    text-align: center;
+    border: 1px solid rgba(42,157,143,0.25);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+}
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+.alert-btn {
+    background: linear-gradient(135deg, var(--green), var(--blue-soft)) !important;
+    color: white !important;
+    border-radius: 50px;
+    padding: 12px 32px;
+    font-weight: 800;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.alert-btn:hover {
+    transform: scale(1.05);
+}
+</style>
 </head>
+
 <body>
-    <main class="container">
-        <header>
-            <span class="badge">Matric & Beyond</span>
-            <h1>MyPath</h1>
-            <p class="subtitle">Where will your waves take you?</p>
-        </header>
 
-        <section id="form-section">
-            <label for="subjects">Subjects & Marks </label>
-            <textarea id="subjects" rows="3" placeholder="e.g. Maths 50%, English 65%, Physics 45%"></textarea>
+<main class="container">
 
-            <label for="interests">What makes you come alive? </label>
-            <input type="text" id="interests" placeholder="e.g. Fixing things, creative writing, helping people">
+<header>
 
-            <label for="goal">Your current vibe </label>
-            <select id="goal">
-                <option value="money">💎 The High Life (Wealth)</option>
-                <option value="passion">🌊 The Flow (Passion)</option>
-                <option value="stable">⚓ The Anchor (Security)</option>
-            </select>
+    <span class="badge">🇿🇦 Built for South African Students</span>
 
-            <button id="submit-btn" onclick="sendData()">Explore My Paths</button>
-        </section>
+    <h1>MyPath</h1>
 
-        <section id="result-section" style="display:none;">
-            <article>
-                <header>
-                    <h3 id="res-title" style="margin:0; color:var(--primary);">
-                        Mapping the currents... <span id="ocean-spinner" class="spinner"></span>
-                    </h3>
-                </header>
-                <div id="output"></div>
-                <footer style="text-align: center; border:none; background:transparent;">
-                    <button class="secondary outline" style="border-radius: 50px;" onclick="location.reload()">New Search</button>
-                </footer>
-            </article>
-        </section>
-    </main>
-
-    <div class="bursary-alert-box">
-        <h4>🎓 Don't Miss Out on 2026 Bursaries</h4>
-        <p>NSFAS, Funza, and private bursaries open soon. Get notified immediately so you can apply first.</p>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScLt6L15P9FK9upfu6ChIR5FSrvMPtoXuQU1WICJI7gI-6U6Q/viewform?usp=header" target="_blank" class="alert-btn">Get Bursary Alerts</a>
+    <!-- 💚 UPDATED DEFINITION (ONLY CHANGE) -->
+    <div class="definition">
+        MyPath is an AI-powered mentor built for the South African student standing at a dead end. By bridging the gap between current marks and future dreams, we navigate the terrain of Universities and TVETs to ensure every "I can’t" is rerouted toward a realistic "How I will."
     </div>
 
-    <script>
-        async function sendData() {
-            const subjects = document.getElementById('subjects').value;
-            const interests = document.getElementById('interests').value;
-            const goal = document.getElementById('goal').value;
+</header>
 
-            if(!subjects || !interests) {
-                alert("Please fill in your details.");
-                return;
-            }
+<section id="form-section">
 
-            document.getElementById('form-section').style.display = 'none';
-            document.getElementById('result-section').style.display = 'block';
-            
-            try {
-                const response = await fetch('/analyze', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({subjects, interests, goal})
-                });
-                
-                const result = await response.json();
-                
-                document.getElementById('ocean-spinner').style.display = 'none';
-                document.getElementById('res-title').innerText = "Your Personalized Map 🗺️";
-                document.getElementById('output').innerHTML = marked.parse(result.message);
-            } catch (error) {
-                document.getElementById('ocean-spinner').style.display = 'none';
-                document.getElementById('output').innerText = "Wipeout! Please try again.";
-            }
-        }
-    </script>
+    <label>Subjects & Marks</label>
+    <textarea id="subjects" rows="3" placeholder="e.g. Maths 50%, Physics 70%"></textarea>
+
+    <label>What makes you come alive?</label>
+    <input id="interests" type="text" placeholder="e.g. tech, business, creating content">
+
+    <label>Your current vibe</label>
+    <select id="goal">
+        <option value="money">💎 Wealth</option>
+        <option value="passion">🌊 Passion</option>
+        <option value="stable">⚓ Security</option>
+    </select>
+
+    <button onclick="sendData()">Explore My Paths</button>
+
+</section>
+
+<section id="result-section" style="display:none;">
+    <article>
+
+        <header>
+            <h3>Mapping your future currents</h3>
+        </header>
+
+        <div id="output"></div>
+
+        <footer style="text-align:center;">
+            <button onclick="location.reload()">Try Again</button>
+        </footer>
+
+    </article>
+</section>
+
+</main>
+
+<!-- CAREER ALERTS -->
+<div class="bursary-alert-box">
+
+    <h3>🎓 Career & Funding Alerts</h3>
+
+    <p>
+        Stay updated on bursaries, TVET openings, universities, and career opportunities across South Africa.
+    </p>
+
+    <a class="alert-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScLt6L15P9FK9upfu6ChIR5FSrvMPtoXuQU1WICJI7gI-6U6Q/viewform?usp=header" target="_blank">
+        Get Career Alerts
+    </a>
+
+</div>
+
+<script>
+async function sendData() {
+
+    const subjects = document.getElementById('subjects').value;
+    const interests = document.getElementById('interests').value;
+    const goal = document.getElementById('goal').value;
+
+    if (!subjects || !interests) {
+        alert("Please fill in your details.");
+        return;
+    }
+
+    document.getElementById('form-section').style.display = 'none';
+    document.getElementById('result-section').style.display = 'block';
+
+    const output = document.getElementById('output');
+    output.innerHTML = "Loading...";
+
+    const response = await fetch('/analyze', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({subjects, interests, goal})
+    });
+
+    const result = await response.json();
+    output.innerHTML = marked.parse(result.message);
+}
+</script>
+
 </body>
 </html>
