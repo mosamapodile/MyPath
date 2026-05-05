@@ -1,17 +1,16 @@
 import os
+import time
+from collections import defaultdict
 from flask import Flask, render_template, request, jsonify
 from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-
-# ----------------------------
-# SYSTEM PROMPT (GOD PROMPT)
-# ----------------------------
+# ============================
+# SYSTEM PROMPT (UNCHANGED - EXACT COPY)
+# ============================
 SYSTEM_PROMPT = """
 You are MyPath — a deeply perceptive, grounded, and wise career mentor built for South African students navigating uncertainty.
 
@@ -179,23 +178,81 @@ TRANSPARENCY:
 End every response with:
 
 "MyPath is free to use. Some programs mentioned may support the platform, but every recommendation is made with your journey in mind."
-
 """
 
 
-# ----------------------------
-# HOME ROUTE
-# ----------------------------
+# ============================
+# LIMIT SYSTEM
+# ============================
+usage_store = defaultdict(list)
+DAILY_LIMIT = 3
+WINDOW = 60 * 60 * 24
+
+
+def check_limit(ip):
+    now = time.time()
+    usage_store[ip] = [t for t in usage_store[ip] if now - t < WINDOW]
+
+    if len(usage_store[ip]) >= DAILY_LIMIT:
+        return False
+
+    usage_store[ip].append(now)
+    return True
+
+
+# ============================
+# ENGINE
+# ============================
+class MyPathEngine:
+    def __init__(self):
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.system_prompt = SYSTEM_PROMPT
+
+    def generate_paths(self, subjects, interests, goal):
+
+        user_message = f"""
+Student Profile:
+
+Subjects & Marks: {subjects}
+Interests: {interests}
+Goal: {goal}
+"""
+
+        response = self.client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": self.system_prompt},
+                {"role": "user", "content": user_message}
+            ],
+            temperature=0.6,
+            response_format={"type": "json_object"}
+        )
+
+        return response.choices[0].message.content
+
+
+# ============================
+# FLASK APP
+# ============================
+app = Flask(__name__)
+engine = MyPathEngine()
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
 
-# ----------------------------
-# ANALYZE ROUTE
-# ----------------------------
 @app.route('/analyze', methods=['POST'])
 def analyze():
+
+    ip = request.remote_addr
+
+    if not check_limit(ip):
+        return jsonify({
+            "message": "Daily limit reached. Come back tomorrow."
+        }), 429
+
     data = request.json
 
     subjects = data.get('subjects', '').strip()
@@ -207,46 +264,12 @@ def analyze():
             "message": "The tide needs water to move. Please share your subjects and interests."
         }), 400
 
+    result = engine.generate_paths(subjects, interests, goal)
 
-    # ----------------------------
-    # USER INPUT ONLY (CLEAN)
-    # ----------------------------
-    user_message = f"""
-Student Profile:
-
-Subjects & Marks: {subjects}
-Interests: {interests}
-Goal: {goal}
-"""
+    return jsonify({
+        "message": result
+    })
 
 
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user_message}
-            ],
-            temperature=0.6
-        )
-
-        advice = response.choices[0].message.content
-
-        return jsonify({
-            "message": advice
-        })
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({
-            "message": "The sea is a bit rough (API Error). Check your key or connection."
-        }), 500
-
-
-# ----------------------------
-# RUN APP
-# ----------------------------
 if __name__ == '__main__':
     app.run(debug=True)
-# $5 openai api keys quota bill
-# refactored git hub contribution to be more modular and clean

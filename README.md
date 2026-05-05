@@ -132,3 +132,92 @@ OpenAI API (GPT-4o-mini for structured reasoning)
 License
 
 MIT
+
+# project structure 
+mypath/
+│
+├── backend/
+│   ├── app/
+│   │
+│   ├── main.py                  # FastAPI entry point
+│   │
+│   ├── core/
+│   │   ├── config.py            # env + settings
+│   │   ├── prompts.py           # MyPath system prompt (clean version)
+│   │   ├── ai_engine.py         # OpenAI wrapper
+│   │   ├── rate_limiter.py      # 3 generations/day logic (Redis)
+│   │
+│   ├── api/
+│   │   ├── routes/
+│   │   │   ├── analyze.py       # main /generate paths endpoint
+│   │   │   ├── user.py          # user profile + history
+│   │   │   ├── auth.py          # optional later
+│   │
+│   ├── services/
+│   │   ├── profile_service.py   # builds structured student profile
+│   │   ├── path_service.py      # generates 3-path logic layer
+│   │   ├── memory_service.py    # PostgreSQL interactions
+│   │
+│   ├── models/
+│   │   ├── user.py
+│   │   ├── career_session.py    # stores 3-path results
+│   │
+│   ├── db/
+│   │   ├── database.py          # connection setup
+│   │   ├── base.py              # SQLAlchemy base
+│   │   ├── repositories.py      # DB queries clean layer
+│   │
+│   ├── schemas/
+│   │   ├── request.py           # input validation (Pydantic)
+│   │   ├── response.py          # structured AI output format
+│   │
+│   ├── utils/
+│   │   ├── logger.py
+│   │   ├── validators.py
+│   │
+│   ├── requirements.txt
+│   └── .env
+│
+│
+├── frontend/
+│   ├── src/
+│   │
+│   │   ├── components/
+│   │   │   ├── PathCard.jsx         # core UI (your 3 paths)
+│   │   │   ├── InputForm.jsx
+│   │   │   ├── Header.jsx
+│   │   │
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Results.jsx
+│   │   │
+│   │   ├── services/
+│   │   │   ├── api.js               # fetch FastAPI
+│   │   │
+│   │   ├── styles/
+│   │   │   ├── theme.css            # ocean theme (your identity stays here)
+│   │   │
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │
+│   ├── tailwind.config.js
+│   ├── package.json
+│
+│
+├── database/
+│   ├── schema.sql                   # users, sessions, usage_limits
+│
+├── redis/
+│   ├── rate_limit.py
+│
+├── docker/
+│   ├── backend.Dockerfile
+│   ├── frontend.Dockerfile
+│   ├── docker-compose.yml
+│
+├── docs/
+│   ├── architecture.md
+│   ├── api_spec.md
+│
+├── README.md
+└── .gitignore

@@ -63,7 +63,7 @@ h1 {
     color: #0b3d91;
 }
 
-/* 💚 QUOTE BLOCK (UNCHANGED) */
+/* 💚 QUOTE BLOCK */
 .definition {
     text-align: center;
     font-size: 0.78rem;
@@ -80,18 +80,54 @@ h1 {
 label {
     font-weight: 800;
     color: var(--blue);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
 }
 
 /* INPUTS */
 textarea, input, select {
-    background: #f7fdff !important;
+    background: #ffffff !important;
     border: 2px solid #d9f2ff !important;
     border-radius: 14px !important;
 }
 
-textarea:focus, input:focus, select:focus {
-    border-color: var(--green) !important;
-    box-shadow: 0 0 0 3px rgba(42,157,143,0.15);
+/* 🔽 DROPDOWN INDICATOR FIX */
+select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230077b6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 1rem center !important;
+    background-size: 1rem !important;
+}
+
+/* 🐠 MODERN LOADER BAR */
+#loader {
+    display: none;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.loader-track {
+    width: 100%;
+    height: 4px;
+    background: #e1f2f7;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.loader-fill {
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    animation: flow 2s infinite ease-in-out;
+    border-radius: 10px;
+}
+
+@keyframes flow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
 }
 
 /* BUTTON */
@@ -103,41 +139,28 @@ button {
     font-weight: 800;
 }
 
-/* OUTPUT */
-#output {
-    background: white;
-    border-radius: 20px;
-    padding: 1.5rem;
-    margin-top: 1rem;
-    border: 1px solid #d9f2ff;
-    min-height: 120px;
-}
-
-/* CAREER ALERTS */
+/* CAREER ALERTS PSYCHOLOGY */
 .bursary-alert-box {
     max-width: 720px;
     width: 100%;
     margin-top: 25px;
-    background: linear-gradient(135deg, #e8fff7, #e6f7ff);
-    padding: 25px;
+    background: white;
+    padding: 30px;
     border-radius: 25px;
     text-align: center;
-    border: 1px solid rgba(42,157,143,0.25);
-    box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+    border: 1px solid rgba(42,157,143,0.15);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.05);
 }
 
 .alert-btn {
-    background: linear-gradient(135deg, var(--green), var(--blue-soft)) !important;
+    background: var(--green) !important;
     color: white !important;
     border-radius: 50px;
     padding: 12px 32px;
     font-weight: 800;
     display: inline-block;
     transition: 0.3s;
-}
-
-.alert-btn:hover {
-    transform: scale(1.05);
+    text-decoration: none;
 }
 </style>
 </head>
@@ -147,50 +170,48 @@ button {
 <main class="container">
 
 <header>
-
     <span class="badge">🇿🇦 Built for South African Students</span>
-
     <h1>MyPath</h1>
-
-    <!-- 💚 UPDATED DEFINITION (ONLY CHANGE) -->
     <div class="definition">
-        MyPath is an AI-powered mentor built for the South African student standing at a dead end. By bridging the gap between current marks and future dreams, we navigate the terrain of Universities and TVETs to ensure every "I can’t" is rerouted toward a realistic "How I will."
+        MyPath helps South African students figure out what comes next when things feel unclear. It uses your marks, interests, and real situation to map out practical paths across universities, TVETs, and other routes, so you can move forward with direction instead of guesswork. Created by Mosa Mapodile, a WeThinkCode student focused on real, grounded career guidance.
     </div>
-
 </header>
 
 <section id="form-section">
-
-    <label>Subjects & Marks</label>
+    <label>Academic Footprint (Subjects & Marks)</label>
     <textarea id="subjects" rows="3" placeholder="e.g. Maths 50%, Physics 70%"></textarea>
 
     <label>What makes you come alive?</label>
     <input id="interests" type="text" placeholder="e.g. tech, business, creating content">
 
-    <label>Your current vibe</label>
+    <label>Select your strategic intent</label>
     <select id="goal">
-        <option value="money">💎 Wealth</option>
-        <option value="passion">🌊 Passion</option>
-        <option value="stable">⚓ Security</option>
+        <option value="" disabled selected>Choose your direction...</option>
+        <option value="money">Capital Growth (High-earning potential)</option>
+        <option value="passion">Personal Fulfillment (Purpose-driven)</option>
+        <option value="stable">Market Resilience (Job security)</option>
     </select>
 
-    <button onclick="sendData()">Explore My Paths</button>
+    <button onclick="sendData()">Explore Paths</button>
+</section>
 
+<!-- MODERN LOADER -->
+<section id="loader">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+    <p style="font-size: 0.8rem; font-weight: 600;">Mapping South African career currents...</p>
 </section>
 
 <section id="result-section" style="display:none;">
     <article>
-
         <header>
-            <h3>Mapping your future currents</h3>
+            <h3>Your Strategic Roadmap</h3>
         </header>
-
         <div id="output"></div>
-
         <footer style="text-align:center;">
-            <button onclick="location.reload()">Try Again</button>
+            <button onclick="location.reload()">Recalibrate</button>
         </footer>
-
     </article>
 </section>
 
@@ -198,45 +219,45 @@ button {
 
 <!-- CAREER ALERTS -->
 <div class="bursary-alert-box">
-
-    <h3>🎓 Career & Funding Alerts</h3>
-
-    <p>
-        Stay updated on bursaries, TVET openings, universities, and career opportunities across South Africa.
+    <h3>Strategic Guidance & Alerts</h3>
+    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
+        In South Africa, access is everything. A missed bursary, TVET, or university deadline can quietly push someone off track for years. I’ve seen how easily that happens when no one is guiding the timing. My focus is to make sure students stay aligned with what’s actually open to them, at the right moment.
     </p>
 
     <a class="alert-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScLt6L15P9FK9upfu6ChIR5FSrvMPtoXuQU1WICJI7gI-6U6Q/viewform?usp=header" target="_blank">
-        Get Career Alerts
+        Get Personal Career Guidance
     </a>
-
 </div>
 
 <script>
 async function sendData() {
-
     const subjects = document.getElementById('subjects').value;
     const interests = document.getElementById('interests').value;
     const goal = document.getElementById('goal').value;
 
-    if (!subjects || !interests) {
-        alert("Please fill in your details.");
+    if (!subjects || !interests || !goal) {
+        alert("Please ensure all fields are completed for an accurate analysis.");
         return;
     }
 
     document.getElementById('form-section').style.display = 'none';
-    document.getElementById('result-section').style.display = 'block';
+    document.getElementById('loader').style.display = 'block';
 
-    const output = document.getElementById('output');
-    output.innerHTML = "Loading...";
+    try {
+        const response = await fetch('/analyze', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({subjects, interests, goal})
+        });
 
-    const response = await fetch('/analyze', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({subjects, interests, goal})
-    });
-
-    const result = await response.json();
-    output.innerHTML = marked.parse(result.message);
+        const result = await response.json();
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('result-section').style.display = 'block';
+        document.getElementById('output').innerHTML = marked.parse(result.message);
+    } catch (e) {
+        alert("Connection lost. Let's try that again.");
+        location.reload();
+    }
 }
 </script>
 
