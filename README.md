@@ -1,223 +1,31 @@
-MyPath
+What is MyPath?
 
-MyPath is an AI-powered career guidance application built for South African students who are trying to make sense of their academic reality and translate it into something meaningful, practical, and achievable.
+MyPath is a practical, AI-driven career navigator specifically designed for the South African educational landscape. It was created to help students who feel stuck, overwhelmed, or uncertain about their future due to their current academic results.
 
-It is not just a tool. It is a direction system.
+Instead of just giving generic advice, the tool takes a student’s actual marks and interests and maps them against real-world requirements for Universities, TVET colleges, and alternative learning routes. It’s designed to turn a moment of academic uncertainty into a realistic, step-by-step plan for what to do next.
+The Stack
 
-Why MyPath Exists
+The project is built to be fast, stable, and focused on logic rather than unnecessary complexity:
 
-MyPath comes from a personal place.
+    Frontend: Simple, clean HTML5 and CSS3. I used the Pico.css framework to ensure a professional, responsive look without the bloat of heavy design libraries.
 
-It was shaped through a journey that includes stepping away from university, experiencing a loss of direction, and then choosing to rebuild purpose through software engineering and career exploration.
+    Backend: Flask (Python). This handles the communication between the user’s input and the AI engine.
 
-At its core, MyPath is about regaining control.
+    Intelligence: The OpenAI API. It acts as the "brain" of the operation, trained with a specific focus on South African career paths and entry requirements.
 
-It reflects a shift from feeling powerless in uncertain systems to actively building something that helps others find clarity inside those same systems.
+    Deployment: Hosted on PythonAnywhere, making the tool live and accessible for any student with an internet connection.
 
-This is why the focus is specifically on South African students — where access to guidance, opportunity, and structured career support is often limited or unclear.
+The Inspiration
 
-What MyPath Does
+The inspiration for MyPath comes from the realities I see many students facing in South Africa. The transition from high school to higher education is often a "dead end" for those who don't meet traditional university criteria or miss critical application windows.
 
-MyPath takes a student’s subjects, interests, and goals, and transforms them into structured, realistic career pathways.
+As a student at WeThinkCode_, I wanted to build something that reflects the engineering principle of solving a high-impact problem with a focused solution. MyPath isn't just about code; it’s about providing a roadmap for students who might otherwise be left behind by the system.
+How it Works
 
-Each response is built around three core directions:
+    Input: The student enters their subjects, marks, and what they are actually interested in.
 
-a stability-oriented path
-a growth-oriented path
-an experimental or alternative path
+    Intent: They select a goal, whether that is high earning potential, job stability, or following a passion.
 
-These paths are not generic suggestions. They are grounded in real-world constraints, education routes, and opportunities relevant to South Africa.
+    Analysis: The Flask backend sends this data to the AI, which calculates three distinct career trajectories.
 
-The goal is to help students move from confusion to structured clarity, and from clarity to action.
-
-System Design
-
-MyPath is being built as a full-stack, modular application rather than a simple chatbot interface.
-
-The system is designed to separate intelligence, state, and presentation so that it can scale properly over time.
-
-Backend (Core Intelligence Layer)
-FastAPI for API structure and performance
-OpenAI API (GPT-4o-mini) for reasoning and career generation
-Pydantic for strict input/output structure and validation
-Data Layer (Memory & Control)
-PostgreSQL for user accounts and persistent career history
-Rate-limited generation system (users can generate career paths a limited number of times per day per account)
-Designed to reduce token usage while encouraging intentional use of the system
-Frontend (User Experience Layer)
-React for a structured, component-based interface
-Tailwind CSS for clean, modern styling while maintaining a calm ocean-inspired visual identity
-System Flow
-
-The system follows a structured pipeline:
-
-User input (subjects, interests, goals)
-→ API request
-→ structured AI reasoning
-→ validated JSON output
-→ frontend rendering of three career paths
-
-The system is designed to produce consistent outputs rather than open-ended conversation.
-
-Core Feature: The Three Path System
-
-Every analysis generates three structured career directions:
-
-Stability Path
-
-A practical route focused on predictable progression, structured education, and long-term security.
-
-Growth Path
-
-A balanced route focused on skill development, opportunity building, and gradual career expansion.
-
-Experimental Path
-
-A flexible route exploring alternative pathways such as entrepreneurship, technology, content creation, or unconventional learning routes.
-
-Each path includes:
-
-reasoning behind why it fits the student
-how to realistically pursue it in a South African context
-limitations or challenges to consider
-first actionable steps
-Usage Design & Constraints
-
-MyPath is intentionally designed with controlled usage in mind.
-
-Each user account is limited to a small number of career generation requests per day.
-
-This is not a restriction for limitation’s sake, but a design choice to encourage:
-
-thoughtful input
-meaningful reflection
-reduced unnecessary API usage
-sustainable system scaling
-
-It also ensures the system remains focused on quality over quantity.
-
-Developer
-
-MyPath is built by Mogau Mapodile, a WeThinkCode software engineering student.
-
-The project is deeply personal.
-
-It comes from lived experience — from stepping out of a traditional academic path, facing uncertainty, and choosing to build a system that helps others navigate similar moments with more clarity than was available.
-
-It is both a technical project and a personal statement of direction.
-
-Vision
-
-MyPath aims to evolve into a full career navigation ecosystem for South African students.
-
-The long-term goal is not just to recommend careers, but to help users track their progression over time, understand their evolving interests, and make better long-term decisions with structured guidance.
-
-It sits at the intersection of:
-
-education
-artificial intelligence
-personal development
-and real-world opportunity access
-Tech Stack (Evolving Architecture)
-
-The system is being upgraded into a scalable production-grade application:
-
-FastAPI (backend services)
-PostgreSQL (user accounts and persistent memory)
-Redis (optional session state handling)
-React (frontend application layer)
-Tailwind CSS (design system and UI consistency)
-OpenAI API (GPT-4o-mini for structured reasoning)
-
-License
-
-MIT
-
-# project structure 
-mypath/
-│
-├── backend/
-│   ├── app/
-│   │
-│   ├── main.py                  # FastAPI entry point
-│   │
-│   ├── core/
-│   │   ├── config.py            # env + settings
-│   │   ├── prompts.py           # MyPath system prompt (clean version)
-│   │   ├── ai_engine.py         # OpenAI wrapper
-│   │   ├── rate_limiter.py      # 3 generations/day logic (Redis)
-│   │
-│   ├── api/
-│   │   ├── routes/
-│   │   │   ├── analyze.py       # main /generate paths endpoint
-│   │   │   ├── user.py          # user profile + history
-│   │   │   ├── auth.py          # optional later
-│   │
-│   ├── services/
-│   │   ├── profile_service.py   # builds structured student profile
-│   │   ├── path_service.py      # generates 3-path logic layer
-│   │   ├── memory_service.py    # PostgreSQL interactions
-│   │
-│   ├── models/
-│   │   ├── user.py
-│   │   ├── career_session.py    # stores 3-path results
-│   │
-│   ├── db/
-│   │   ├── database.py          # connection setup
-│   │   ├── base.py              # SQLAlchemy base
-│   │   ├── repositories.py      # DB queries clean layer
-│   │
-│   ├── schemas/
-│   │   ├── request.py           # input validation (Pydantic)
-│   │   ├── response.py          # structured AI output format
-│   │
-│   ├── utils/
-│   │   ├── logger.py
-│   │   ├── validators.py
-│   │
-│   ├── requirements.txt
-│   └── .env
-│
-│
-├── frontend/
-│   ├── src/
-│   │
-│   │   ├── components/
-│   │   │   ├── PathCard.jsx         # core UI (your 3 paths)
-│   │   │   ├── InputForm.jsx
-│   │   │   ├── Header.jsx
-│   │   │
-│   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── Results.jsx
-│   │   │
-│   │   ├── services/
-│   │   │   ├── api.js               # fetch FastAPI
-│   │   │
-│   │   ├── styles/
-│   │   │   ├── theme.css            # ocean theme (your identity stays here)
-│   │   │
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │
-│   ├── tailwind.config.js
-│   ├── package.json
-│
-│
-├── database/
-│   ├── schema.sql                   # users, sessions, usage_limits
-│
-├── redis/
-│   ├── rate_limit.py
-│
-├── docker/
-│   ├── backend.Dockerfile
-│   ├── frontend.Dockerfile
-│   ├── docker-compose.yml
-│
-├── docs/
-│   ├── architecture.md
-│   ├── api_spec.md
-│
-├── README.md
-└── .gitignore
+    Action: The student receives a "Strategic Roadmap" that tells them exactly where they qualify and what specific steps they need to take to improve their chances.
