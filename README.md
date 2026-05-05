@@ -1,57 +1,133 @@
-# MyPath
-AI career navigation tool in the context of South Africa
-
 MyPath
 
-A simple AI-driven tool to help South African students map out career paths based on their actual results and interests.
-The Goal
+MyPath is an AI-powered career guidance application built for South African students who are trying to make sense of their academic reality and translate it into something meaningful, practical, and achievable.
 
-I built this for students who feel stuck after school—whether they didn't get the marks they wanted or just don't know what's out there. It takes your subjects and goals and gives you a realistic plan.
-How it works
+It is not just a tool. It is a direction system.
 
-    Input: You enter your subjects, marks, and what you care about (Money, Passion, or Stability).
+Why MyPath Exists
 
-    Processing: A Flask backend sends this data to the OpenAI API with a custom prompt focused on the SA education system.
+MyPath comes from a personal place.
 
-    Output: You get 3 career options, the required qualifications, and—most importantly—advice on what to do if your marks aren't high enough yet.
+It was shaped through a journey that includes stepping away from university, experiencing a loss of direction, and then choosing to rebuild purpose through software engineering and career exploration.
 
-Tech Used
+At its core, MyPath is about regaining control.
 
-    Python/Flask - Backend logic
+It reflects a shift from feeling powerless in uncertain systems to actively building something that helps others find clarity inside those same systems.
 
-    Vanilla JS - Handling the frontend requests
+This is why the focus is specifically on South African students — where access to guidance, opportunity, and structured career support is often limited or unclear.
 
-    Pico.css - Minimalist styling
+What MyPath Does
 
-    OpenAI API - The "brain" behind the career suggestions
+MyPath takes a student’s subjects, interests, and goals, and transforms them into structured, realistic career pathways.
 
-Build Log
+Each response is built around three core directions:
 
-    Day 1: Wireframes and UI flow.
+a stability-oriented path
+a growth-oriented path
+an experimental or alternative path
 
-    Day 2: Building the basic HTML/CSS shell.
+These paths are not generic suggestions. They are grounded in real-world constraints, education routes, and opportunities relevant to South Africa.
 
-    Day 3: Setting up the Flask server.
+The goal is to help students move from confusion to structured clarity, and from clarity to action.
 
-    Day 4: Prompt engineering and API integration.
+System Design
 
-    Day 5: Connecting the frontend to the backend.
+MyPath is being built as a full-stack, modular application rather than a simple chatbot interface.
 
-    Day 6: Cleanup and bug fixes.
+The system is designed to separate intelligence, state, and presentation so that it can scale properly over time.
 
-    Day 7: Final testing and demo.
+Backend (Core Intelligence Layer)
+FastAPI for API structure and performance
+OpenAI API (GPT-4o-mini) for reasoning and career generation
+Pydantic for strict input/output structure and validation
+Data Layer (Memory & Control)
+PostgreSQL for user accounts and persistent career history
+Rate-limited generation system (users can generate career paths a limited number of times per day per account)
+Designed to reduce token usage while encouraging intentional use of the system
+Frontend (User Experience Layer)
+React for a structured, component-based interface
+Tailwind CSS for clean, modern styling while maintaining a calm ocean-inspired visual identity
+System Flow
 
-Setup
+The system follows a structured pipeline:
 
-    Clone the repo.
+User input (subjects, interests, goals)
+→ API request
+→ structured AI reasoning
+→ validated JSON output
+→ frontend rendering of three career paths
 
-    Create a virtual environment: python -m venv venv.
+The system is designed to produce consistent outputs rather than open-ended conversation.
 
-    Install requirements: pip install -r requirements.txt.
+Core Feature: The Three Path System
 
-    Create a .env file with your OPENAI_API_KEY.
+Every analysis generates three structured career directions:
 
-    Run python app.py.
+Stability Path
+
+A practical route focused on predictable progression, structured education, and long-term security.
+
+Growth Path
+
+A balanced route focused on skill development, opportunity building, and gradual career expansion.
+
+Experimental Path
+
+A flexible route exploring alternative pathways such as entrepreneurship, technology, content creation, or unconventional learning routes.
+
+Each path includes:
+
+reasoning behind why it fits the student
+how to realistically pursue it in a South African context
+limitations or challenges to consider
+first actionable steps
+Usage Design & Constraints
+
+MyPath is intentionally designed with controlled usage in mind.
+
+Each user account is limited to a small number of career generation requests per day.
+
+This is not a restriction for limitation’s sake, but a design choice to encourage:
+
+thoughtful input
+meaningful reflection
+reduced unnecessary API usage
+sustainable system scaling
+
+It also ensures the system remains focused on quality over quantity.
+
+Developer
+
+MyPath is built by Mogau Mapodile, a WeThinkCode software engineering student.
+
+The project is deeply personal.
+
+It comes from lived experience — from stepping out of a traditional academic path, facing uncertainty, and choosing to build a system that helps others navigate similar moments with more clarity than was available.
+
+It is both a technical project and a personal statement of direction.
+
+Vision
+
+MyPath aims to evolve into a full career navigation ecosystem for South African students.
+
+The long-term goal is not just to recommend careers, but to help users track their progression over time, understand their evolving interests, and make better long-term decisions with structured guidance.
+
+It sits at the intersection of:
+
+education
+artificial intelligence
+personal development
+and real-world opportunity access
+Tech Stack (Evolving Architecture)
+
+The system is being upgraded into a scalable production-grade application:
+
+FastAPI (backend services)
+PostgreSQL (user accounts and persistent memory)
+Redis (optional session state handling)
+React (frontend application layer)
+Tailwind CSS (design system and UI consistency)
+OpenAI API (GPT-4o-mini for structured reasoning)
 
 License
 
