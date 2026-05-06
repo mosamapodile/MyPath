@@ -4,6 +4,7 @@ from collections import defaultdict
 from flask import Flask, render_template, request, jsonify
 from openai import OpenAI
 from dotenv import load_dotenv
+from flask_cors import CORS # Add this import at the top too!
 
 load_dotenv()
 
@@ -225,7 +226,7 @@ Goal: {goal}
                 {"role": "user", "content": user_message}
             ],
             temperature=0.6,
-            response_format={"type": "json_object"}
+            response_format={"type": "text"}
         )
 
         return response.choices[0].message.content
@@ -234,9 +235,10 @@ Goal: {goal}
 # ============================
 # FLASK APP
 # ============================
-app = Flask(__name__)
-engine = MyPathEngine()
 
+app = Flask(__name__)
+CORS(app) # This enables the handshake
+engine = MyPathEngine()
 
 @app.route('/')
 def home():

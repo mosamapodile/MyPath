@@ -251,9 +251,15 @@ async function sendData() {
         });
 
         const result = await response.json();
-        document.getElementById('loader').style.display = 'none';
-        document.getElementById('result-section').style.display = 'block';
-        document.getElementById('output').innerHTML = marked.parse(result.message);
+        
+        if (response.ok) {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+            // result.message matches the "message" key in your Python return jsonify({"message": result})
+            document.getElementById('output').innerHTML = marked.parse(result.message);
+        } else {
+            throw new Error(result.message);
+        }
     } catch (e) {
         alert("Connection lost. Let's try that again.");
         location.reload();
