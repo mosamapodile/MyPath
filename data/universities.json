@@ -1,0 +1,23 @@
+[
+  {
+    "id": "uj-bsc-cs",
+    "institution": "University of Johannesburg",
+    "programme": "BSc Computer Science and Informatics",
+    "min_aps": 30,
+    "required_subjects": {
+      "Mathematics": 60,
+      "English": 50
+    }
+  },
+  {
+    "id": "wits-bsc-eng",
+    "institution": "University of the Witwatersrand",
+    "programme": "BSc Engineering (Mechanical)",
+    "min_aps": 36,
+    "required_subjects": {
+      "Mathematics": 70,
+      "Physical Sciences": 70,
+      "English": 60
+    }
+  }
+]

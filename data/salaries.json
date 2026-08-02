@@ -1,0 +1,17 @@
+{
+  "software-developer": {
+    "entry_level_zar": 240000,
+    "mid_level_zar": 480000,
+    "senior_level_zar": 900000
+  },
+  "data-analyst": {
+    "entry_level_zar": 210000,
+    "mid_level_zar": 420000,
+    "senior_level_zar": 750000
+  },
+  "mechanical-engineer": {
+    "entry_level_zar": 280000,
+    "mid_level_zar": 550000,
+    "senior_level_zar": 980000
+  }
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "nsfas-2026",
+    "name": "NSFAS Higher Education Scheme",
+    "min_aps": 19,
+    "max_household_income": 350000,
+    "coverage": "Full Tuition, Accommodation, Books & Living Allowance"
+  },
+  {
+    "id": "ict-thuthuka-bursary",
+    "name": "ICT & Engineering Skills Bursary",
+    "min_aps": 32,
+    "max_household_income": 600000,
+    "coverage": "Full Tuition & Laptop Allowance"
+  }
+]

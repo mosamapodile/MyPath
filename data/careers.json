@@ -1,0 +1,32 @@
+[
+  {
+    "id": "software-developer",
+    "title": "Software Developer",
+    "category": "Technology",
+    "required_subjects": ["Mathematics"],
+    "min_subject_marks": { "Mathematics": 60 },
+    "interest_tags": ["coding", "technology", "problem-solving", "software"],
+    "automation_risk": "Low",
+    "industry_growth": "High"
+  },
+  {
+    "id": "data-analyst",
+    "title": "Data Analyst",
+    "category": "Technology",
+    "required_subjects": ["Mathematics"],
+    "min_subject_marks": { "Mathematics": 50 },
+    "interest_tags": ["data", "analytics", "math", "technology", "statistics"],
+    "automation_risk": "Medium",
+    "industry_growth": "Very High"
+  },
+  {
+    "id": "mechanical-engineer",
+    "title": "Mechanical Engineer",
+    "category": "Engineering",
+    "required_subjects": ["Mathematics", "Physical Sciences"],
+    "min_subject_marks": { "Mathematics": 70, "Physical Sciences": 70 },
+    "interest_tags": ["engineering", "machines", "physics", "building"],
+    "automation_risk": "Low",
+    "industry_growth": "Moderate"
+  }
+]

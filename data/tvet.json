@@ -1,0 +1,11 @@
+[
+  {
+    "id": "swgc-ncv-it",
+    "institution": "South West Gauteng TVET College",
+    "programme": "NC(V) Information Technology & Computer Science",
+    "min_aps": 18,
+    "required_subjects": {
+      "Mathematics": 40
+    }
+  }
+]

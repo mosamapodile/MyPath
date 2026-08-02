@@ -1,271 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-<title>MyPath | Career Navigator</title>
-
-<style>
-:root {
-    --blue: #0077b6;
-    --blue-soft: #00b4d8;
-    --green: #2a9d8f;
-    --green-soft: #d1fae5;
-}
-
-/* 🌊 BACKGROUND */
-body {
-    background: linear-gradient(180deg, #ffffff 0%, #e6f7ff 45%, #e8fff7 100%);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Inter', sans-serif;
-    padding: 20px;
-    color: #023e8a;
-}
-
-/* 🧊 CARD */
-main.container {
-    max-width: 720px;
-    width: 100%;
-    background: rgba(255,255,255,0.78);
-    backdrop-filter: blur(18px);
-    padding: 2.8rem;
-    border-radius: 30px;
-    border: 1px solid rgba(0,180,216,0.2);
-    box-shadow: 0 25px 80px rgba(0, 119, 182, 0.12);
-}
-
-/* 🧭 TITLE */
-h1 {
-    font-size: 3.1rem;
-    color: var(--blue);
-    text-align: center;
-    margin-bottom: 0.5rem;
-}
-
-/* 🏷️ BADGE */
-.badge {
-    display: block;
-    width: fit-content;
-    margin: 0 auto 1rem auto;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    background: linear-gradient(90deg, var(--blue-soft), var(--green-soft));
-    color: #0b3d91;
-}
-
-/* 💚 QUOTE BLOCK */
-.definition {
-    text-align: center;
-    font-size: 0.78rem;
-    font-style: italic;
-    font-family: Georgia, serif;
-    color: var(--green);
-    opacity: 0.9;
-    line-height: 1.6;
-    margin: 1.2rem 0 2rem 0;
-    padding: 0 12px;
-}
-
-/* LABELS */
-label {
-    font-weight: 800;
-    color: var(--blue);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-}
-
-/* INPUTS */
-textarea, input, select {
-    background: #ffffff !important;
-    border: 2px solid #d9f2ff !important;
-    border-radius: 14px !important;
-}
-
-/* 🔽 DROPDOWN INDICATOR */
-select {
-    cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230077b6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 1rem center !important;
-    background-size: 1rem !important;
-}
-
-/* 🐠 MODERN LOADER BAR */
-#loader {
-    display: none;
-    text-align: center;
-    padding: 20px 0;
-}
-
-.loader-track {
-    width: 100%;
-    height: 4px;
-    background: #e1f2f7;
-    overflow: hidden;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-.loader-fill {
-    width: 30%;
-    height: 100%;
-    background: linear-gradient(90deg, var(--blue), var(--green));
-    animation: flow 2s infinite ease-in-out;
-    border-radius: 10px;
-}
-
-@keyframes flow {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(400%); }
-}
-
-/* BUTTON */
-button {
-    border: none;
-    background: linear-gradient(135deg, var(--blue), var(--green));
-    border-radius: 50px;
-    padding: 0.95rem 2rem;
-    font-weight: 800;
-}
-
-/* CAREER ALERTS PSYCHOLOGY */
-.bursary-alert-box {
-    max-width: 720px;
-    width: 100%;
-    margin-top: 25px;
-    background: white;
-    padding: 30px;
-    border-radius: 25px;
-    text-align: center;
-    border: 1px solid rgba(42,157,143,0.15);
-    box-shadow: 0 15px 50px rgba(0,0,0,0.05);
-}
-
-.alert-btn {
-    background: var(--green) !important;
-    color: white !important;
-    border-radius: 50px;
-    padding: 12px 32px;
-    font-weight: 800;
-    display: inline-block;
-    transition: 0.3s;
-    text-decoration: none;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyPath | NextGen Career and Academic Intelligence</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<main class="container">
+    <!-- Background Ambient Glows -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
 
-<header>
-    <span class="badge">🇿🇦 Built for South African Students</span>
-    <h1>MyPath</h1>
-    <div class="definition">
-        MyPath helps South African students figure out what comes next when things feel unclear. It uses your marks, interests, and real situation to map out practical paths across universities, TVETs, and other routes, so you can move forward with direction instead of guesswork. Created by Mosa Mapodile, a WeThinkCode student focused on real, grounded career guidance.
-    </div>
-</header>
-
-<section id="form-section">
-    <label>Academic Footprint (Subjects & Marks)</label>
-    <textarea id="subjects" rows="3" placeholder="e.g. Maths 50%, Physics 70%"></textarea>
-
-    <label>What makes you come alive?</label>
-    <input id="interests" type="text" placeholder="e.g. tech, business, creating content">
-
-    <label>Select your strategic intent</label>
-    <select id="goal">
-        <option value="" disabled selected>Choose your direction...</option>
-        <option value="money">Capital Growth (High-earning potential)</option>
-        <option value="passion">Personal Fulfillment (Purpose-driven)</option>
-        <option value="stable">Market Resilience (Job security)</option>
-    </select>
-
-    <button onclick="sendData()">Explore Paths</button>
-</section>
-
-<!-- MODERN LOADER -->
-<section id="loader">
-    <div class="loader-track">
-        <div class="loader-fill"></div>
-    </div>
-    <p style="font-size: 0.8rem; font-weight: 600;">Mapping South African career currents...</p>
-</section>
-
-<section id="result-section" style="display:none;">
-    <article>
-        <header>
-            <h3>Your Strategic Roadmap</h3>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="navbar">
+            <div class="brand">
+                <span class="logo-icon">🇿🇦</span>
+                <span class="logo-text">MyPath<span class="logo-dot">.sa</span></span>
+            </div>
+            <p class="tagline"><em>“NextGen Career and Academic Intelligence”</em></p>
         </header>
-        <div id="output"></div>
-        <footer style="text-align:center;">
-            <button onclick="location.reload()">Recalibrate</button>
-        </footer>
-    </article>
-</section>
 
-</main>
+        <!-- Main Workspace Grid -->
+        <main class="workspace-grid">
+            
+            <!-- Left Panel: Input Form -->
+            <section class="glass-card form-section">
+                <div class="card-header">
+                    <h2>Learner Profile</h2>
+                    <p>Enter your subjects and interests to compute your exact eligibility.</p>
+                </div>
 
-<!-- CAREER ALERTS -->
-<div class="bursary-alert-box">
-    <h3>🎓 Strategic Guidance & Alerts</h3>
-    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
-        In South Africa, access is everything. A missed bursary, TVET, or university deadline can quietly push someone off track for years. I’ve seen how easily that happens when no one is guiding the timing. My focus is to make sure students stay aligned with what’s actually open to them, at the right moment.
-    </p>
+                <form id="student-form" onsubmit="submitProfile(event)">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="input-field" placeholder="e.g. Name Surname" required>
+                    </div>
 
-    <a class="alert-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScLt6L15P9FK9upfu6ChIR5FSrvMPtoXuQU1WICJI7gI-6U6Q/viewform?usp=header" target="_blank">
-        Get Personal Career Guidance
-    </a>
-</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="grade">Grade</label>
+                            <select id="grade" class="input-field" required>
+                                <option value="12">Grade 12</option>
+                                <option value="11">Grade 11</option>
+                                <option value="10">Grade 10</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="income">Annual Household Income (ZAR)</label>
+                            <input type="number" id="income" class="input-field" placeholder="e.g. 150000" required>
+                        </div>
+                    </div>
 
-<script>
-async function sendData() {
-    const subjects = document.getElementById('subjects').value;
-    const interests = document.getElementById('interests').value;
-    const goal = document.getElementById('goal').value;
+                    <!-- Customizable Dynamic Subject Marks Builder -->
+                    <div class="form-group">
+                        <div class="subject-header-row">
+                            <label>NSC Subjects & Marks (%)</label>
+                            <button type="button" class="btn-secondary-sm" onclick="addSubjectRow()">+ Add Subject</button>
+                        </div>
+                        <div id="subject-list" class="subject-container">
+                            <!-- Default 7 standard subjects added via JavaScript on page load -->
+                        </div>
+                    </div>
 
-    if (!subjects || !interests || !goal) {
-        alert("Please ensure all fields are completed for an accurate analysis.");
-        return;
-    }
+                    <div class="form-group">
+                        <label for="interests">Interests & Passions (Comma separated)</label>
+                        <input type="text" id="interests" class="input-field" placeholder="e.g. coding, technology, problem-solving" required>
+                    </div>
 
-    document.getElementById('form-section').style.display = 'none';
-    document.getElementById('loader').style.display = 'block';
+                    <button type="submit" id="submit-btn" class="btn-primary">
+                        <span>Calculate & Generate Pathway</span>
+                        <div class="btn-spinner hidden" id="spinner"></div>
+                    </button>
+                </form>
+            </section>
 
-    try {
-        const response = await fetch('/analyze', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({subjects, interests, goal})
-        });
+            <!-- Right Panel: Results Dashboard -->
+            <section class="results-section">
+                
+                <!-- Initial State -->
+                <div id="empty-state" class="glass-card empty-card">
+                    <div class="empty-icon">💎</div>
+                    <h3>Ready to Discover Your Path</h3>
+                    <p>Fill out your subject results on the left to calculate your APS, match degree programmes, bursaries, and AI-synthesized career guidance.</p>
+                </div>
 
-        const result = await response.json();
-        
-        if (response.ok) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('result-section').style.display = 'block';
-            // result.message matches the "message" key in your Python return jsonify({"message": result})
-            document.getElementById('output').innerHTML = marked.parse(result.message);
-        } else {
-            throw new Error(result.message);
-        }
-    } catch (e) {
-        alert("Connection lost. Let's try that again.");
-        location.reload();
-    }
-}
-</script>
+                <!-- Active Dashboard -->
+                <div id="dashboard-content" class="dashboard-content hidden">
+                    
+                    <!-- Metrics Bar -->
+                    <div class="metrics-grid">
+                        <div class="metric-card glass-card">
+                            <span class="metric-label">Calculated APS Score</span>
+                            <span class="metric-value cyan-glow" id="res-aps">--</span>
+                        </div>
+                        <div class="metric-card glass-card">
+                            <span class="metric-label">Top Career Match</span>
+                            <span class="metric-value pearl-text" id="res-top-career">--</span>
+                        </div>
+                        <div class="metric-card glass-card">
+                            <span class="metric-label">Funding Matches</span>
+                            <span class="metric-value soft-blue" id="res-funding-count">--</span>
+                        </div>
+                    </div>
 
+                    <!-- AI Guidance Box -->
+                    <div class="glass-card ai-guidance-card">
+                        <div class="ai-badge">
+                            <span class="ai-spark">✨</span> AI Career Reasoning & Roadmap
+                        </div>
+                        <div class="ai-text" id="res-ai-guidance">
+                            Generating your personalized narrative...
+                        </div>
+                    </div>
+
+                    <!-- Tabbed Results Section -->
+                    <div class="glass-card details-card">
+                        <div class="tab-header">
+                            <button class="tab-btn active" onclick="switchTab(event, 'careers')">Careers</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'universities')">Universities</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'tvet')">TVET Colleges</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'funding')">Bursaries & Aid</button>
+                        </div>
+
+                        <div class="tab-body">
+                            <div id="tab-careers" class="tab-pane active"></div>
+                            <div id="tab-universities" class="tab-pane hidden"></div>
+                            <div id="tab-tvet" class="tab-pane hidden"></div>
+                            <div id="tab-funding" class="tab-pane hidden"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
