@@ -1,31 +1,113 @@
-What is MyPath?
+# MyPath — South African AI Career Intelligence Platform
 
-MyPath is a practical, AI-driven career navigator specifically designed for the South African educational landscape. It was created to help students who feel stuck, overwhelmed, or uncertain about their future due to their current academic results.
+> **Version:** 1.0  
+> **Author:** Mosa Mapodile  
+> **Project Status:** Active Development  
+> **Target Deployment:** Docker / Google Cloud Run
 
-Instead of just giving generic advice, the tool takes a student’s actual marks and interests and maps them against real-world requirements for Universities, TVET colleges, and alternative learning routes. It’s designed to turn a moment of academic uncertainty into a realistic, step-by-step plan for what to do next.
-The Stack
+[[_TOC_]]
 
-The project is built to be fast, stable, and focused on logic rather than unnecessary complexity:
+---
 
-    Frontend: Simple, clean HTML5 and CSS3. I used the Pico.css framework to ensure a professional, responsive look without the bloat of heavy design libraries.
+# 1. Project Overview
 
-    Backend: Flask (Python). This handles the communication between the user’s input and the AI engine.
+**MyPath** is an AI-powered career intelligence platform engineered specifically for South African learners. 
 
-    Intelligence: The OpenAI API. It acts as the "brain" of the operation, trained with a specific focus on South African career paths and entry requirements.
+Rather than functioning as a standard, generic chatbot, MyPath integrates structured South African educational data, deterministic business logic, and large language models to deliver accurate, personalized career guidance.
 
-    Deployment: Hosted on PythonAnywhere, making the tool live and accessible for any student with an internet connection.
+WARNING: **Anti-Hallucination Policy:** The system strictly separates data processing from text generation. AI models are strictly prohibited from performing APS score calculations or determining institutional admission thresholds directly.
 
-The Inspiration
+### Key Questions Answered for Students
+* **What can I study?**
+* **Which universities or TVET colleges am I eligible for?**
+* **What careers align with my interests and academic performance?**
+* **Which bursaries, NSFAS opportunities, learnerships, and certifications should I apply for?**
+* **What practical steps should I take next?**
 
-The inspiration for MyPath comes from the realities I see many students facing in South Africa. The transition from high school to higher education is often a "dead end" for those who don't meet traditional university criteria or miss critical application windows.
+**Long-Term Vision:** To establish South Africa's primary Career Intelligence Platform grounded in local educational context and labor market realities.
 
-As a student at WeThinkCode_, I wanted to build something that reflects the engineering principle of solving a high-impact problem with a focused solution. MyPath isn't just about code; it’s about providing a roadmap for students who might otherwise be left behind by the system.
-How it Works
+---
 
-    Input: The student enters their subjects, marks, and what they are actually interested in.
+# 2. Technology Stack
 
-    Intent: They select a goal, whether that is high earning potential, job stability, or following a passion.
+### Backend
+* **Language:** Python 3.12
+* **Framework:** Flask, Gunicorn
+* **Middleware:** Flask-CORS
+* **Integrations:** OpenAI API (`gpt-4o`)
+* **Configuration:** `python-dotenv`
 
-    Analysis: The Flask backend sends this data to the AI, which calculates three distinct career trajectories.
+### Frontend
+* **Current:** HTML5, CSS3, JavaScript (Vanilla ES6+)
+* **Planned:** React / Next.js, Tailwind CSS
 
-    Action: The student receives a "Strategic Roadmap" that tells them exactly where they qualify and what specific steps they need to take to improve their chances.
+### Infrastructure & Deployment
+* **Containerization:** Docker
+* **Cloud Platform:** Google Cloud Run
+* **Target Persistence Layer:** PostgreSQL, Redis, Google Cloud Storage
+
+---
+
+# 3. Development Philosophy & Architecture Principles
+
+MyPath explicitly divides system execution into two primary execution tiers: **Deterministic Python Computation** and **Generative AI Reasoning**.
+
+```mermaid
+graph TD
+    A[Student Input] --> B[Deterministic Python Engines]
+    B -->|APS Score, Eligibility, Matches| C[Fact Payload]
+    C --> D[OpenAI Prompt Engine]
+    D --> E[Empathetic Guidance Output]
+
+
+# project structure 
+
+mypath/
+├── app.py                       # Core Flask Application Entrypoint
+├── config.py                    # Environment Configuration & Flags
+├── Dockerfile                   # Containerization Deployment Blueprint
+├── requirements.txt             # Python Dependencies List
+├── prompts/
+│   └── master_prompt.py         # AI Context Assembly & Prompt Engineering
+├── routes/
+│   └── api.py                   # API Endpoint Controllers & Input Guards
+├── services/
+│   ├── ai_engine.py             # OpenAI REST Client Interface
+│   ├── student_profile.py       # Input Adapter & Data Normalizer
+│   ├── recommendation_engine.py # Core Pipeline Orchestration Service
+│   ├── university_engine.py     # Higher Education Logic Service
+│   └── opportunity_engine.py    # Funding & Training Service
+├── engines/
+│   ├── aps_engine.py            # NSC Point Calculation Engine
+│   ├── career_match_engine.py   # Subject & Interest Scoring Engine
+│   ├── eligibility_engine.py    # Institution Admission Logic
+│   ├── funding_engine.py        # Bursary & NSFAS Requirement Matcher
+│   ├── recommendation_ranker.py # Deterministic Option Ranking System
+│   └── scoring_engine.py        # Profile Fit Metric Generator
+├── models/
+│   └── student.py               # Domain Data Model Definitions
+├── schemas/
+│   ├── career_response.py       # Response DTO
+│   ├── career_path.py           # Career Schema DTO
+│   ├── salary.py                # Economic Benchmark DTO
+│   ├── roadmap.py               # Path Progression DTO
+│   ├── student_request.py       # API Request Validation Schema
+│   └── university.py            # Academic Institution DTO
+├── utils/
+│   ├── validators.py            # Input Validation Functions
+│   └── helpers.py               # General String/Data Utilities
+├── data/
+│   ├── universities.json        # South African University APS Rules Database
+│   ├── careers.json             # Career Taxonomy Matrix
+│   ├── aps.json                 # NSC Subject Point Lookups
+│   ├── salaries.json            # Local Market Remuneration Benchmarks
+│   ├── bursaries.json           # Active Bursary Requirements DB
+│   ├── learnerships.json        # Learnership Directory
+│   ├── opportunities.json       # Extracurricular & Skills Directory
+│   └── tvet.json                # TVET College Requirements DB
+├── templates/
+│   └── index.html               # Main Dashboard HTML Template
+├── static/
+│   ├── css/                     # Platform Stylesheet Definitions
+│   └── js/                      # Main Client UI Controller
+└── tests/                       # Unit & Integration Test Suites
