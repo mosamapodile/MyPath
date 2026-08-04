@@ -1,6 +1,6 @@
 /**
  * MyPath Client-Side Controller
- * Architecture: Vanilla JavaScript (Frontend UI) <-> Flask API (/api/recommend)
+ * Architecture: Vanilla JavaScript (Frontend UI) <-> Flask API (/api/evaluate)
  * Author: Mosa Mapodile
  */
 
@@ -68,7 +68,7 @@ function removeSubjectRow(button) {
 
 /**
  * Main form submission handler
- * Sanitizes input, constructs the exact payload, and posts to Flask API
+ * Sanitizes input, constructs payload, and posts to Flask API endpoint (/api/evaluate)
  * @param {Event} event 
  */
 async function submitProfile(event) {
@@ -78,18 +78,21 @@ async function submitProfile(event) {
     const spinner = document.getElementById("spinner");
     
     // Extract basic fields
-    const nameVal = document.getElementById("name").value.trim();
-    const gradeVal = parseInt(document.getElementById("grade").value, 10);
-    const incomeVal = parseFloat(document.getElementById("income").value) || 0.0;
+    const nameVal = document.getElementById("name") ? document.getElementById("name").value.trim() : "";
+    const incomeVal = parseFloat(document.getElementById("income")?.value) || 0.0;
+    const locationVal = document.getElementById("location")?.value || "Any";
+    const hasDisability = document.getElementById("has_disability")?.checked || false;
+    const isSassa = document.getElementById("is_sassa_recipient")?.checked || false;
     
-    // Parse interests array
-    const interestsRaw = document.getElementById("interests").value;
+    // Parse user interests array
+    const interestsElem = document.getElementById("interests");
+    const interestsRaw = interestsElem ? interestsElem.value : "";
     const interestsList = interestsRaw
         .split(",")
         .map(i => i.trim())
         .filter(i => i.length > 0);
 
-    // Build & sanitize subjects key-value object
+    // Build & sanitize subjects dictionary
     const subjectsDict = {};
     const subjectRows = document.querySelectorAll(".subject-row");
 
@@ -114,13 +117,15 @@ async function submitProfile(event) {
         return;
     }
 
-    // Construct request payload matching student_request schema
+    // Payload formatted to match /api/evaluate endpoint payload parameters
     const payload = {
         name: nameVal,
-        grade: gradeVal,
+        user_interests: interestsList,
         household_income: incomeVal,
-        subjects: subjectsDict,
-        interests: interestsList
+        location: locationVal,
+        has_disability: hasDisability,
+        is_sassa_recipient: isSassa,
+        subjects: subjectsDict
     };
 
     // UI Loading state
@@ -128,7 +133,7 @@ async function submitProfile(event) {
     if (spinner) spinner.classList.remove("hidden");
 
     try {
-        const response = await fetch("/api/recommend", {
+        const response = await fetch("/api/evaluate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -137,19 +142,27 @@ async function submitProfile(event) {
             body: JSON.stringify(payload)
         });
 
-        const responseData = await response.json();
+        const rawText = await response.text();
 
-        // Handle bad request (HTTP 400) or server errors (HTTP 500)
+        // Safe JSON parse handling
+        let responseData;
+        try {
+            responseData = JSON.parse(rawText);
+        } catch (parseError) {
+            console.error("Non-JSON Server Output Received:", rawText);
+            throw new Error(`Server returned HTML error (${response.status}). Check backend console.`);
+        }
+
         if (!response.ok) {
-            const errorMessage = responseData.error || responseData.message || `HTTP ${response.status} Bad Request`;
+            const errorMessage = responseData.message || responseData.error || `HTTP ${response.status} Error`;
             throw new Error(errorMessage);
         }
 
-        // Render response dashboard
+        // Render dashboard using response metrics and guidance object
         renderDashboard(responseData);
 
     } catch (error) {
-        console.error("[MyPath API Error]:", error);
+        console.error("[MyPath Client Error]:", error);
         alert(`Failed to compute profile recommendations:\n${error.message}`);
     } finally {
         if (submitBtn) submitBtn.disabled = false;
@@ -158,7 +171,7 @@ async function submitProfile(event) {
 }
 
 /**
- * Updates UI Dashboard with calculated APS and AI narrative facts
+ * Updates UI Dashboard with calculated APS, NSFAS eligibility, and guidance schemas
  * @param {Object} data 
  */
 function renderDashboard(data) {
@@ -168,104 +181,132 @@ function renderDashboard(data) {
     if (emptyState) emptyState.classList.add("hidden");
     if (dashboardContent) dashboardContent.classList.remove("hidden");
 
-    // Top Header Metrics
-    document.getElementById("res-aps").innerText = data.aps_score ?? "--";
+    const metrics = data.metrics || {};
+    const guidance = data.guidance || {};
+
+    // 1. Top Metric Cards
+    // Total APS score calculated excluding LO
+    const totalAps = metrics.aps ? metrics.aps.total_aps : "--";
+    const apsElem = document.getElementById("res-aps");
+    if (apsElem) apsElem.innerText = totalAps;
     
-    const topCareer = (data.recommended_careers && data.recommended_careers.length > 0)
-        ? data.recommended_careers[0].title
-        : "N/A";
-    document.getElementById("res-top-career").innerText = topCareer;
+    // Top Career Title
+    const topCareers = guidance.top_careers || [];
+    const topCareerTitle = topCareers.length > 0 ? topCareers[0].career_title : "N/A";
+    const careerElem = document.getElementById("res-top-career");
+    if (careerElem) careerElem.innerText = topCareerTitle;
 
-    const fundingCount = data.funding_matches ? data.funding_matches.length : 0;
-    document.getElementById("res-funding-count").innerText = fundingCount;
-
-    // AI Narrative Output
-    const aiGuidanceElem = document.getElementById("res-ai-guidance");
-    if (aiGuidanceElem) {
-        aiGuidanceElem.innerText = data.ai_guidance || "Your personalized roadmap is ready.";
+    // Funding Status & NSFAS R350,000 threshold indicator
+    const fundingInfo = metrics.funding || {};
+    const fundingElem = document.getElementById("res-funding-count");
+    if (fundingElem) {
+        fundingElem.innerText = fundingInfo.nsfas_eligible ? "NSFAS Eligible" : "Missing Middle / Bursaries";
     }
 
-    // Tab Contents
-    renderTabCareers(data.recommended_careers || []);
-    renderTabUniversities(data.eligible_universities || []);
-    renderTabTVET(data.eligible_tvet || []);
-    renderTabFunding(data.funding_matches || []);
+    // 2. ✨ AI Counselor Brief & Roadmap Narrative
+    const aiGuidanceElem = document.getElementById("res-ai-guidance");
+    if (aiGuidanceElem) {
+        aiGuidanceElem.innerText = guidance.counselor_brief || "Your personalized roadmap is ready.";
+    }
+
+    // 3. Render Categorized Response Tabs
+    renderTabCareers(guidance.top_careers || []);
+    renderTabUniversities(guidance.top_universities || []);
+    renderTabTVET(guidance.top_tvet_courses || []);
+    renderTabFunding(guidance.top_bursaries || []);
 }
 
+/**
+ * Render Top 3 Careers
+ */
 function renderTabCareers(careers) {
     const container = document.getElementById("tab-careers");
     if (!container) return;
 
     if (careers.length === 0) {
-        container.innerHTML = `<p class="item-sub">No explicit career matches found for the selected interests.</p>`;
+        container.innerHTML = `<p class="item-sub">No matching careers found for your selected interests.</p>`;
         return;
     }
     
     container.innerHTML = careers.map(c => `
         <div class="item-card">
             <div>
-                <div class="item-title">${escapeHtml(c.title)}</div>
-                <div class="item-sub">Category: ${escapeHtml(c.category || 'General')} | Growth: ${escapeHtml(c.industry_growth || 'High')}</div>
+                <div class="item-title">${escapeHtml(c.career_title)}</div>
+                <div class="item-sub">${escapeHtml(c.fit_reasoning)}</div>
+                ${c.skill_targets && c.skill_targets.length > 0 
+                    ? `<div class="item-tags" style="margin-top: 6px;">
+                        ${c.skill_targets.map(s => `<span class="tag-badge">${escapeHtml(s)}</span>`).join(" ")}
+                       </div>` 
+                    : ''}
             </div>
-            <div class="badge-score">${c.fit_score ?? 85}% Fit</div>
         </div>
     `).join("");
 }
 
+/**
+ * Render Top 3 Universities + Course & App Fee
+ */
 function renderTabUniversities(unis) {
     const container = document.getElementById("tab-universities");
     if (!container) return;
 
     if (unis.length === 0) {
-        container.innerHTML = `<p class="item-sub">No university degree programmes matched current APS score.</p>`;
+        container.innerHTML = `<p class="item-sub">No eligible university degree programmes found matching your APS.</p>`;
         return;
     }
 
     container.innerHTML = unis.map(u => `
         <div class="item-card">
             <div>
-                <div class="item-title">${escapeHtml(u.programme || u.name)}</div>
-                <div class="item-sub">${escapeHtml(u.institution || 'University')}</div>
+                <div class="item-title">${escapeHtml(u.degree_or_diploma)}</div>
+                <div class="item-sub">${escapeHtml(u.university_name)}</div>
             </div>
-            <div class="badge-score">Min APS: ${u.min_aps ?? '--'}</div>
+            <div class="badge-score">App Fee: ${escapeHtml(u.application_fee)}</div>
         </div>
     `).join("");
 }
 
+/**
+ * Render Top 3 TVET Colleges + NQF Level
+ */
 function renderTabTVET(tvets) {
     const container = document.getElementById("tab-tvet");
     if (!container) return;
 
     if (tvets.length === 0) {
-        container.innerHTML = `<p class="item-sub">No TVET college programmes found.</p>`;
+        container.innerHTML = `<p class="item-sub">No eligible TVET college courses found matching your APS.</p>`;
         return;
     }
 
     container.innerHTML = tvets.map(t => `
         <div class="item-card">
             <div>
-                <div class="item-title">${escapeHtml(t.programme || t.name)}</div>
-                <div class="item-sub">${escapeHtml(t.institution || 'TVET College')}</div>
+                <div class="item-title">${escapeHtml(t.course_name)}</div>
+                <div class="item-sub">${escapeHtml(t.tvet_college)}</div>
             </div>
-            <div class="badge-score">Min APS: ${t.min_aps ?? '--'}</div>
+            <div class="badge-score">${escapeHtml(t.nqf_level)}</div>
         </div>
     `).join("");
 }
 
-function renderTabFunding(funding) {
+/**
+ * Render Top 3 Eligible Bursaries
+ */
+function renderTabFunding(bursaries) {
     const container = document.getElementById("tab-funding");
     if (!container) return;
 
-    if (funding.length === 0) {
-        container.innerHTML = `<p class="item-sub">No bursaries found matching this income threshold.</p>`;
+    if (bursaries.length === 0) {
+        container.innerHTML = `<p class="item-sub">No eligible bursaries found matching your APS and income threshold.</p>`;
         return;
     }
 
-    container.innerHTML = funding.map(f => `
+    container.innerHTML = bursaries.map(f => `
         <div class="item-card">
             <div>
-                <div class="item-title">${escapeHtml(f.name)}</div>
-                <div class="item-sub">Coverage: ${escapeHtml(f.coverage || 'Tuition & Accommodation')}</div>
+                <div class="item-title">${escapeHtml(f.bursary_name)}</div>
+                <div class="item-sub">${escapeHtml(f.eligibility_notes)}</div>
+                <div class="item-sub" style="font-size: 0.825rem; color: #666; margin-top: 4px;">Coverage: ${escapeHtml(f.coverage_details)}</div>
             </div>
             <div class="badge-score">Eligible</div>
         </div>
