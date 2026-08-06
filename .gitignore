@@ -12,6 +12,7 @@ instance/
 venv/
 ENV/
 env/
+memo.txt
 
 # --- Security / Credentials (CRITICAL) ---
 # This ensures your API key never leaves your computer
